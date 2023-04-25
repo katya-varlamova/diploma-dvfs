@@ -10,7 +10,7 @@ typedef struct
 
 class IPmuCollector {
 public:
-    virtual void StartCollection(const std::vector<event_t> &events) = 0;
-    virtual void StopCollection(double &cpuTime) = 0;
+    virtual void StartCollection(const std::vector<event_t> &events, int pid = 0, int cpu = -1) = 0;
+    virtual void StopCollection() = 0;
     virtual std::vector<double> GetVals() = 0;
 };

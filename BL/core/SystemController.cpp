@@ -28,21 +28,21 @@ std::string GovernerToString(governor_t governor) {
     }
 }
 governor_t StringToGoverner(const std::string &str) {
-    if (str == "powersave") return POWERSAVE;
-    if (str == "performance") return PERFORMANCE;
-    if (str == "ondemand") return ONDEMAND;
-    if (str == "schedutil") return SCHEDUTIL;
-    if (str == "conservative") return CONSERVATIVE;
-    if (str == "userspace") return USERSPACE;
+    if (str == "powersave\n") return POWERSAVE;
+    if (str == "performance\n") return PERFORMANCE;
+    if (str == "ondemand\n") return ONDEMAND;
+    if (str == "schedutil\n") return SCHEDUTIL;
+    if (str == "conservative\n") return CONSERVATIVE;
+    if (str == "userspace\n") return USERSPACE;
     return USERSPACE;
 }
 
 void SystemController::OpenFDs() {
     for (int i = 0; i < m_cpuNum; i++) {
         m_cur_cpufreq_fds.push_back(open(CUR_CPU_FREQ_PATH(i).c_str(), O_RDONLY));
-        m_min_cpufreq_fds.push_back(open(MIN_CPU_FREQ_PATH(i).c_str(), O_WRONLY|O_CREAT));
-        m_max_cpufreq_fds.push_back(open(MAX_CPU_FREQ_PATH(i).c_str(), O_WRONLY|O_CREAT));
-        m_governor_fds.push_back(open(CPU_FREQ_GOVERNOR_PATH(i).c_str(), O_RDWR));
+        m_min_cpufreq_fds.push_back(open(MIN_CPU_FREQ_PATH(i).c_str(), O_WRONLY|O_CREAT|O_TRUNC));
+        m_max_cpufreq_fds.push_back(open(MAX_CPU_FREQ_PATH(i).c_str(), O_WRONLY|O_CREAT|O_TRUNC));
+        m_governor_fds.push_back(open(CPU_FREQ_GOVERNOR_PATH(i).c_str(), O_RDWR|O_TRUNC));
     }
     m_current_fd = open(CURRENT_NOW_PATH().c_str(), O_RDONLY);
     m_voltage_fd = open(VOLTAGE_NOW_PATH().c_str(), O_RDONLY);
@@ -66,6 +66,7 @@ void SystemController::CloseFDs() {
 long SystemController::GetCpuFreq(int cpu)
 {
     char buf[100];
+    lseek(m_cur_cpufreq_fds[cpu], 0, SEEK_SET);
     read(m_cur_cpufreq_fds[cpu], buf, 100);
     lseek(m_cur_cpufreq_fds[cpu], 0, SEEK_SET);
     return strtol(buf, nullptr, 10);
@@ -73,28 +74,36 @@ long SystemController::GetCpuFreq(int cpu)
 void SystemController::SetCpuFreq(int cpu, long freq)
 {
     auto buf  = std::to_string(freq);
+    lseek(m_max_cpufreq_fds[cpu], 0, SEEK_SET);
     write(m_max_cpufreq_fds[cpu], buf.c_str(), 100);
+    lseek(m_max_cpufreq_fds[cpu], 0, SEEK_SET);
+
+    lseek(m_min_cpufreq_fds[cpu], 0, SEEK_SET);
     write(m_min_cpufreq_fds[cpu], buf.c_str(), 100);
+    lseek(m_min_cpufreq_fds[cpu], 0, SEEK_SET);
 }
 
-long SystemController::GetCurrent()
+double SystemController::GetCurrent()
 {
     char buf[100];
+    lseek(m_current_fd, 0, SEEK_SET);
     read(m_current_fd, buf, 100);
     lseek(m_current_fd, 0, SEEK_SET);
-    return strtol(buf, nullptr, 10);
+    return strtol(buf, nullptr, 10) * 1e-6;
 }
-long SystemController::GetVoltage()
+double SystemController::GetVoltage()
 {
     char buf[100];
+    lseek(m_voltage_fd, 0, SEEK_SET);
     read(m_voltage_fd, buf, 100);
     lseek(m_voltage_fd, 0, SEEK_SET);
-    return strtol(buf, nullptr, 10);
+    return strtol(buf, nullptr, 10) * 1e-6;
 }
 
 governor_t SystemController::GetCpuFreqGovernor(int cpu)
 {
     char buf[100];
+    lseek(m_governor_fds[cpu], 0, SEEK_SET);
     read(m_governor_fds[cpu], buf, 100);
     lseek(m_governor_fds[cpu], 0, SEEK_SET);
     return StringToGoverner(buf);

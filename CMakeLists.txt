@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.23)
+
+
+list( APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
+include( common )
+
 project(demo)
 
-set(CMAKE_CXX_STANDARD 17)
-
-add_executable(demo main.cpp
-        core/ISystemController.h
-        core/IPmuCollector.h
-        workloads/workloads.cpp
-        core/PmuCollector.cpp
-        core/PmuCollector.h
-        core/SystemController.cpp
-        core/SystemController.h
-        workloads/workloads.h)
+include( libs )
+add_subdirectory( base )
+add_subdirectory( BL )
+add_subdirectory( DA )
+add_subdirectory( Main )
+add_subdirectory( Bench )

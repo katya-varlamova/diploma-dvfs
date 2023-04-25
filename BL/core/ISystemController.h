@@ -22,6 +22,6 @@ public:
     virtual governor_t GetCpuFreqGovernor(int cpu) = 0;
     virtual void SetCpuFreqGovernor(int cpu, governor_t governor) = 0;
 
-    virtual long GetCurrent() = 0;
-    virtual long GetVoltage() = 0;
+    virtual double GetCurrent() = 0;
+    virtual double GetVoltage() = 0;
 };

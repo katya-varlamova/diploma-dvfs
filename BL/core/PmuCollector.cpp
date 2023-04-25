@@ -32,8 +32,8 @@ std::vector<double> PmuCollector::GetVals()
     std::vector<double> deltas = vals;
     struct read_format* rf = (struct read_format*) buf;
     read(fds[0], buf, sizeof(buf));
-    for (int i = 0; i < rf->nr; i++) {
-        for (int j = 0; j < fds.size(); j++) {
+    for (unsigned i = 0; i < rf->nr; i++) {
+        for (unsigned j = 0; j < fds.size(); j++) {
             if (rf->values[i].id == ids[j]) {
                 deltas[j] = rf->values[i].value - deltas[j];
                 vals[j] = rf->values[i].value;
@@ -42,7 +42,9 @@ std::vector<double> PmuCollector::GetVals()
     }
     return deltas;
 }
-void PmuCollector::StartCollection(const std::vector<event_t> &events) {
+void PmuCollector::StartCollection(const std::vector<event_t> &events, int pid , int cpu) {
+    m_cpu = cpu;
+    m_pid = pid;
     if (events.empty())
         return;
     for (const auto & e : events)
@@ -51,7 +53,7 @@ void PmuCollector::StartCollection(const std::vector<event_t> &events) {
     ioctl(fds[0], PERF_EVENT_IOC_ENABLE, PERF_IOC_FLAG_GROUP);
 }
 
-void PmuCollector::StopCollection(double &cpuTime) {
+void PmuCollector::StopCollection() {
     ioctl(fds[0], PERF_EVENT_IOC_DISABLE, PERF_IOC_FLAG_GROUP);
     fds.clear();
     ids.clear();

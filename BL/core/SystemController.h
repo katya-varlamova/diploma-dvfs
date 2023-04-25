@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ISystemController.h"
-#include "Paths.h"
 #include <vector>
 #include <fcntl.h>
 #include <unistd.h>
@@ -21,8 +20,8 @@ public:
     governor_t GetCpuFreqGovernor(int cpu) override;
     void SetCpuFreqGovernor(int cpu, governor_t governor) override;
 
-    long GetCurrent() override;
-    long GetVoltage() override;
+    double GetCurrent() override;
+    double GetVoltage() override;
 
     ~SystemController() { CloseFDs(); }
 private:

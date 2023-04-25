@@ -1,0 +1,2 @@
+DB_NAME: "/home/kate/Desktop/diploma/repo/DBScripts/demoDB.db"
+LogFile: "stdout"

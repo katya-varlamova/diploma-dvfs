@@ -15,9 +15,9 @@
 
 class PmuCollector : public IPmuCollector {
 public:
-    PmuCollector(int pid = 0, int cpu = -1) : m_pid(pid), m_cpu(cpu) {};
-    void StartCollection(const std::vector<event_t> &events) override;
-    void StopCollection(double &cpuTime) override;
+    PmuCollector(){};
+    void StartCollection(const std::vector<event_t> &events, int pid = 0, int cpu = -1) override;
+    void StopCollection() override;
     std::vector<double> GetVals() override;
 private:
     void InitEvent(event_t event);

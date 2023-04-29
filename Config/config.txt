@@ -1,2 +1,2 @@
 DB_NAME: "/home/kate/Desktop/diploma/repo/DBScripts/demoDB.db"
-LogFile: "stdout"
+LogFile: "/home/kate/Desktop/diploma/repo/logfile.log"

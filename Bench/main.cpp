@@ -4,8 +4,8 @@ int main()
 {
     const long bufSize = 1 * 1024 * 1024 * 1024;
     int cpuPortion = 5;
-    long cpuIters = 1000000000 * std::pow(1.5, 0);
-    long memIters = 1000000000; // 5000; 5000 * 20000
+    long cpuIters = 100000000 * std::pow(1.5, 0);
+    long memIters = 100000000; // 5000; 5000 * 20000
     int *arr = (int *) malloc(bufSize * sizeof(int));
     long* rands = (long *) malloc(memIters * sizeof (long));
     for (long i = 0; i < memIters; i++) {
@@ -16,7 +16,7 @@ int main()
     // mem-bound part
     for (; i < memIters; i++) ++arr[rands[i]];
     // cpu-bound part
-    for (; i < cpuIters; i++);
+    //for (; i < cpuIters; i++);
 }
 
 //void io_bound()

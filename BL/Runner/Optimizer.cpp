@@ -3,6 +3,8 @@
 
 long Optimizer::Optimize(double mrpi)
 {
+    if (mrpi < 1e-5)
+        return 2700000;
     long freq = m_optimals[0].cpufreq;
     for (long unsigned i = 0; i < m_optimals.size() - 1; ++i) {
         if (mrpi < m_optimals[i].mrpi)

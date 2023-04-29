@@ -7,7 +7,7 @@
 using SQLiteConnPtr = sqlite3 *;
 class SqliteConnection {
 public:
-    SqliteConnection(const std::shared_ptr<BaseConfig>& conf) { // TODO config
+    SqliteConnection(const std::shared_ptr<BaseConfig>& conf) {
         m_connStr = conf->GetStringField( { DbNameSection } ) ;
     }
     SQLiteConnPtr GetConnect() {

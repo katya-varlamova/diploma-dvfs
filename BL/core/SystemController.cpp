@@ -63,6 +63,17 @@ void SystemController::CloseFDs() {
     close(m_voltage_fd);
 }
 
+void SystemController::NormalizeCpuFreq(int cpu, long min, long max) {
+    auto buf  = std::to_string(max);
+    lseek(m_max_cpufreq_fds[cpu], 0, SEEK_SET);
+    write(m_max_cpufreq_fds[cpu], buf.c_str(), 100);
+    lseek(m_max_cpufreq_fds[cpu], 0, SEEK_SET);
+
+    buf  = std::to_string(min);
+    lseek(m_min_cpufreq_fds[cpu], 0, SEEK_SET);
+    write(m_min_cpufreq_fds[cpu], buf.c_str(), 100);
+    lseek(m_min_cpufreq_fds[cpu], 0, SEEK_SET);
+}
 long SystemController::GetCpuFreq(int cpu)
 {
     char buf[100];
@@ -74,13 +85,13 @@ long SystemController::GetCpuFreq(int cpu)
 void SystemController::SetCpuFreq(int cpu, long freq)
 {
     auto buf  = std::to_string(freq);
-    lseek(m_max_cpufreq_fds[cpu], 0, SEEK_SET);
-    write(m_max_cpufreq_fds[cpu], buf.c_str(), 100);
-    lseek(m_max_cpufreq_fds[cpu], 0, SEEK_SET);
-
     lseek(m_min_cpufreq_fds[cpu], 0, SEEK_SET);
     write(m_min_cpufreq_fds[cpu], buf.c_str(), 100);
     lseek(m_min_cpufreq_fds[cpu], 0, SEEK_SET);
+
+    lseek(m_max_cpufreq_fds[cpu], 0, SEEK_SET);
+    write(m_max_cpufreq_fds[cpu], buf.c_str(), 100);
+    lseek(m_max_cpufreq_fds[cpu], 0, SEEK_SET);
 }
 
 double SystemController::GetCurrent()
@@ -111,7 +122,9 @@ governor_t SystemController::GetCpuFreqGovernor(int cpu)
 void SystemController::SetCpuFreqGovernor(int cpu, governor_t governor)
 {
     auto buf  = GovernerToString(governor);
+    lseek(m_governor_fds[cpu], 0, SEEK_SET);
     write(m_governor_fds[cpu], buf.c_str(), 100);
+    lseek(m_governor_fds[cpu], 0, SEEK_SET);
 }
 
 int SystemController::SetAffinity(int pid, const std::vector<int> &cpus)

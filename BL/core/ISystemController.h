@@ -24,4 +24,6 @@ public:
 
     virtual double GetCurrent() = 0;
     virtual double GetVoltage() = 0;
+
+    virtual void NormalizeCpuFreq(int cpu, long min, long max) = 0;
 };

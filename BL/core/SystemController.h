@@ -19,6 +19,7 @@ public:
 
     governor_t GetCpuFreqGovernor(int cpu) override;
     void SetCpuFreqGovernor(int cpu, governor_t governor) override;
+    void NormalizeCpuFreq(int cpu, long min, long max) override;
 
     double GetCurrent() override;
     double GetVoltage() override;

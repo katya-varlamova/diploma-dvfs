@@ -4,39 +4,66 @@
 #include "workloads/IdleWorkload.h"
 #include "workloads/PortionWorkload.h"
 #include "DataCollection/Collector.h"
-#include "Runner/Runner.h"
+#include "Runner/DemoRunner.h"
 #include "Runner/Optimizer.h"
 #include "Sqlite/DASqliteFacade.h"
 #include "config/yamlcpp_config.h"
+#include "Runner/BasicRunner.h"
+
 void collection() {
-    Collector collector;
     auto config = std::shared_ptr<BaseConfig> (new YamlCppConfig("/home/kate/Desktop/diploma/repo/Config/config.txt"));
     auto facade = std::shared_ptr<IDAFacade> (new DASqliteFacade(config));
+
+    Collector collector;
     Collector::m_collector = std::shared_ptr<IPmuCollector> (new PmuCollector());
     Collector::m_controller = std::shared_ptr<ISystemController> (new SystemController());
-    for (int i = 0; i < 101; i += 1) {
+    for (int i = 45; i < 101; i += 1) {
         auto w = std::shared_ptr<IWorkload>(new PortionWorkload(i / 100.0));
         auto collectedData = collector.Collect(w, 5);
         facade->StorePortionCollectionData(collectedData);
     }
     auto w = std::shared_ptr<IWorkload>(new IdleWorkload(2));
-    auto collectedData = collector.Collect(w, 10);
-    facade->StoreIdleCollectionData(collectedData);
+//    auto collectedData = collector.Collect(w, 10);
+//    facade->StoreIdleCollectionData(collectedData);
 }
-void optimization() {
-    Runner::m_collector = std::shared_ptr<IPmuCollector> (new PmuCollector());
-    Runner::m_controller = std::shared_ptr<ISystemController> (new SystemController());
+void demo(const std::string &path) {
+    DemoRunner::m_collector = std::shared_ptr<IPmuCollector> (new PmuCollector());
+    DemoRunner::m_controller = std::shared_ptr<ISystemController> (new SystemController());
 
-    Runner runner;
     auto config = std::shared_ptr<BaseConfig> (new YamlCppConfig("/home/kate/Desktop/diploma/repo/Config/config.txt"));
     auto facade = std::shared_ptr<IDAFacade> (new DASqliteFacade(config));
+
     auto optimizer = std::shared_ptr<IOptimizer>(new Optimizer(facade));
-    runner.run("../Bench/Bench", optimizer);
+    DemoRunner runner(optimizer);
+
+    stats_t stats = runner.run(path);
+    printf("demo,%lf,%lf,%lf\n", stats.time, stats.energy, stats.inst/stats.cycles);
+}
+void os(governor_t governor, const std::string &path) {
+    BasicRunner::m_collector = std::shared_ptr<IPmuCollector> (new PmuCollector());
+    BasicRunner::m_controller = std::shared_ptr<ISystemController> (new SystemController());
+
+    BasicRunner runner;
+
+    stats_t stats = runner.run(path, governor);
+    printf((GovernerToString(governor) + ",%lf,%lf,%lf\n").c_str(),stats.time, stats.energy, stats.inst/stats.cycles);
 }
 int main() {
-    collection();
-    //optimization();
+    //collection();
+    auto config = std::shared_ptr<BaseConfig> (new YamlCppConfig("/home/kate/Desktop/diploma/repo/Config/config.txt"));
+    LoggerFactory::InitLogger(config);
 
+    std::vector<governor_t> govs = {PERFORMANCE, POWERSAVE, SCHEDUTIL, ONDEMAND, CONSERVATIVE};
+    std::vector<std::string> paths = {"../Bench/stream"};//{"../Bench/Bench", "../Bench/stream"};
+    int attempts = 2;
+    for (const auto &p :paths ) {
+        for (const auto &g: govs) {
+            for (int i = 0; i < attempts; i++)
+                os(g, p);
+        }
+        for (int i = 0; i < attempts; i++)
+            demo(p);
+    }
     return 0;
 }
 

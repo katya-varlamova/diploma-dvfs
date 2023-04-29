@@ -26,9 +26,11 @@ target_sources( ${PROJECT_NAME}
         workloads/PortionWorkload.cpp
         workloads/PortionWorkload.h
         Runner/IOptimizer.h
-        Runner/Runner.cpp
-        Runner/Runner.h
+        Runner/DemoRunner.cpp
+        Runner/DemoRunner.h
         Runner/Optimizer.cpp
         Runner/Optimizer.h
         DataCollection/DataTypes.h
-        IDAFacade.h )
+        IDAFacade.h
+        Runner/BasicRunner.cpp
+        Runner/BasicRunner.h)

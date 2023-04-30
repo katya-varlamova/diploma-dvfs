@@ -31,11 +31,13 @@ public:
     QWidget *centralwidget;
     QWidget *gridLayoutWidget;
     QWidget *gridLayoutWidget_2;
+    QWidget *gridLayoutWidget_3;
     QGridLayout *gridLayout;
     QLabel *label_5;
     QLabel *label_4;
     QGridLayout *gridLayout_2;
     QGridLayout *gridLayout_4;
+    QGridLayout *gridLayout_5;
     QLineEdit *attemptsText;
     QLineEdit *benchPathText;
     QLabel *label_2;
@@ -52,6 +54,8 @@ public:
     QTableWidget *tableWidget;
     QMenuBar *menubar;
     QStatusBar *statusbar;
+    QLabel *mrpiLab;
+    QLabel *mrpiImg;
 
     void setupUi(QMainWindow *View)
     {
@@ -63,11 +67,15 @@ public:
 
         gridLayoutWidget = new QWidget(centralwidget);
         gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
-        gridLayoutWidget->setGeometry(QRect(10, 10, 1000, 701));
+        gridLayoutWidget->setGeometry(QRect(10, 10, 1000, 700));
 
         gridLayoutWidget_2 = new QWidget(centralwidget);
         gridLayoutWidget_2->setObjectName(QString::fromUtf8("gridLayoutWidget_2"));
         gridLayoutWidget_2->setGeometry(QRect(1050, 70, 1900, 1600));
+
+        gridLayoutWidget_3 = new QWidget(centralwidget);
+        gridLayoutWidget_3->setObjectName(QString::fromUtf8("gridLayoutWidget_3"));
+        gridLayoutWidget_3->setGeometry(QRect(40, 730, 1000, 700));
 
         gridLayout = new QGridLayout(gridLayoutWidget);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
@@ -76,6 +84,10 @@ public:
         gridLayout_4 = new QGridLayout(gridLayoutWidget_2);
         gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
         gridLayout_4->setContentsMargins(0, 0, 0, 0);
+
+        gridLayout_5 = new QGridLayout(gridLayoutWidget_3);
+        gridLayout_5->setObjectName(QString::fromUtf8("gridLayout_5"));
+        gridLayout_5->setContentsMargins(0, 0, 0, 0);
 
         label_5 = new QLabel(gridLayoutWidget);
         label_5->setObjectName(QString::fromUtf8("label_5"));
@@ -159,6 +171,16 @@ public:
 
 
         gridLayout->addLayout(gridLayout_2, 1, 0, 1, 1);
+
+        mrpiLab = new QLabel(gridLayoutWidget_3);
+        mrpiLab->setObjectName(QString::fromUtf8("mrpiLab"));
+        mrpiLab->setHidden(true);
+        mrpiLab->setStyleSheet(QString::fromUtf8("font: 14pt \"Ubuntu\";color:rgb(204, 0, 0);"));
+        mrpiLab->setText("Изменение MRPI и частоты (нормированные)");
+        gridLayout_5->addWidget(mrpiLab, 0, 0, 1, 1);
+
+        mrpiImg = new QLabel(gridLayoutWidget_3);
+        gridLayout_5->addWidget(mrpiImg, 1, 0, 1, 1);
 
         tableWidget = new QTableWidget(centralwidget);
         tableWidget->setObjectName(QString::fromUtf8("tableWidget"));

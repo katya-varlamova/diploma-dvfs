@@ -4,6 +4,7 @@ static int callback(void *data, int argc, char **argv, char **cols) {
     UNUSED_VAR(cols)
     UNUSED_VAR(argc)
     auto res = (std::vector<ResultDataType> *) data;
+    std::setlocale(LC_NUMERIC, "C");
     ResultDataType type = {std::stof(argv[1]), std::stoi(argv[0])};
     res->push_back(type);
     return 0;

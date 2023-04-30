@@ -7,8 +7,10 @@ typedef struct {
     double energy;
     double inst;
     double cycles;
+    int run_id;
 } stats_t;
 class IRunner {
 public:
     virtual stats_t run(const std::string &path, governor_t governor) = 0;
+    static int run_id;
 };

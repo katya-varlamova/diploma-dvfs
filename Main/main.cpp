@@ -53,9 +53,9 @@ int main() {
     auto config = std::shared_ptr<BaseConfig> (new YamlCppConfig("/home/kate/Desktop/diploma/repo/Config/config.txt"));
     LoggerFactory::InitLogger(config);
 
-    std::vector<governor_t> govs = {PERFORMANCE, POWERSAVE, SCHEDUTIL, ONDEMAND, CONSERVATIVE};
-    std::vector<std::string> paths = {"../Bench/stream"};//{"../Bench/Bench", "../Bench/stream"};
-    int attempts = 2;
+    std::vector<governor_t> govs = {PERFORMANCE, POWERSAVE};//{PERFORMANCE, POWERSAVE, SCHEDUTIL, ONDEMAND, CONSERVATIVE};
+    std::vector<std::string> paths = {"../Bench/Bench"};//{"../Bench/Bench", "../Bench/stream"};
+    int attempts = 1;
     for (const auto &p :paths ) {
         for (const auto &g: govs) {
             for (int i = 0; i < attempts; i++)

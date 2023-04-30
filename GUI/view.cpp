@@ -18,6 +18,7 @@ View::View(const std::shared_ptr<BaseConfig> &config, QWidget *parent)
 
 void View::drawTable() {
     ui->tableWidget->clear();
+    ui->mrpiImg->clear();
     ui->tableWidget->setColumnCount(4);
     ui->tableWidget->setHorizontalHeaderLabels({"управляющий",
                                                 "производительность [инст./цикл]",
@@ -30,8 +31,11 @@ void View::drawTable() {
 
     ui->tableWidget->setRowCount(m_govs.size());
     for (int i = 0; i < m_govs.size(); i++) {
-        if (m_govs[i] == USERSPACE)
+        if (m_govs[i] == USERSPACE) {
             ui->tableWidget->setItem(i, 0, new QTableWidgetItem("mrpi-based (userspace)"));
+            ui->mrpiImg->setPixmap(QPixmap::fromImage(*mrpiFreqGraph));
+            ui->mrpiLab->setHidden(false);
+        }
         else
             ui->tableWidget->setItem(i, 0, new QTableWidgetItem((GovernerToString(m_govs[i])).c_str()));
         ui->tableWidget->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(std::to_string(m_stats[m_govs[i]].ipc))));
@@ -49,16 +53,27 @@ View::~View()
 }
 
 void View::loadImages() {
+    std::string com = "python3 " + m_graphDirectory + "drawer.py ";
+    for (auto i : runIDs) {
+        com += std::to_string(i) + " ";
+    }
+    system(com.c_str());
     for (const auto &g : m_govs) {
-        system(("python3 " + m_graphDirectory + "drawer.py").c_str());
         QString imgPath = QString::fromStdString(m_graphDirectory + "img/" + GovernerToString(g) + ".png");
         auto img = std::shared_ptr<QImage>(new QImage());
         img->load(imgPath);
         m_graphImages.push_back(img);
+        if (g == USERSPACE) {
+            QString path = QString::fromStdString(m_graphDirectory + "img/freq_mrpi.png");
+            mrpiFreqGraph = std::shared_ptr<QImage>(new QImage());
+            mrpiFreqGraph->load(path);
+        }
     }
 }
 void View::on_compareButton_clicked()
 {
+    ui->mrpiLab->setHidden(true);
+    runIDs.clear();
     m_stats.clear();
     m_graphImages.clear();
     m_benchPath = ui->benchPathText->text().toStdString();
@@ -85,10 +100,9 @@ void View::calculateStats() {
                 DemoRunner runner(optimizer);
 
                auto st = runner.run(m_benchPath);
-               if (i != 0) {
-                   m_stats[g].power_consumtion += st.energy / st.time;
-                   m_stats[g].ipc += st.inst / st.cycles;
-               }
+               m_stats[g].power_consumtion += st.energy / st.time;
+               m_stats[g].ipc += st.inst / st.cycles;
+                if (i == 0) runIDs.push_back(st.run_id);
             } else {
                 BasicRunner::m_collector = std::shared_ptr<IPmuCollector> (new PmuCollector());
                 BasicRunner::m_controller = std::shared_ptr<ISystemController> (new SystemController());
@@ -96,16 +110,15 @@ void View::calculateStats() {
                 BasicRunner runner;
 
                 auto st = runner.run(m_benchPath, g);
-                if (i != 0) {
-                    m_stats[g].power_consumtion += st.energy / st.time;
-                    m_stats[g].ipc += st.inst / st.cycles;
-                }
+                m_stats[g].power_consumtion += st.energy / st.time;
+                m_stats[g].ipc += st.inst / st.cycles;
+                if (i == 0) runIDs.push_back(st.run_id);
             }
         }
     }
     for (const auto &g: m_govs) {
-        m_stats[g] = {m_stats[g].power_consumtion / (m_attempts - 1),
-                      m_stats[g].ipc / (m_attempts - 1),};
+        m_stats[g] = {m_stats[g].power_consumtion / m_attempts,
+                      m_stats[g].ipc / m_attempts};
     }
 }
 void View::on_powersaveButton_stateChanged(int arg1)

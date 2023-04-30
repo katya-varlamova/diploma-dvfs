@@ -12,7 +12,7 @@ double DemoRunner::cycles = 0;
 static void handler(int sn) {
     UNUSED_VAR(sn)
     auto vals = DemoRunner::m_collector->GetVals();
-    DemoRunner::energy += (0.01 * DemoRunner::m_controller->GetCurrent()) * DemoRunner::m_controller->GetVoltage();
+    DemoRunner::energy += (0.0085 * DemoRunner::m_controller->GetCurrent()) * DemoRunner::m_controller->GetVoltage();
     DemoRunner::time += vals[3] / 1000000000;
 
     long freq = DemoRunner::m_optimizer->Optimize(vals[2] / vals[0]);
@@ -21,8 +21,9 @@ static void handler(int sn) {
     DemoRunner::m_controller->SetCpuFreq(4, freq);
     DemoRunner::inst += vals[0];
     DemoRunner::cycles += vals[1];
-    LoggerFactory::GetLogger()->LogInfo(
-            ( std::string("FreqLog,userspace,") +std::to_string(DemoRunner::m_controller->GetCpuFreq(0)) + "," +  std::to_string(vals[2] / vals[0])).c_str()); //printf("%ld\n\n",  BasicRunner::m_controller->GetCpuFreq(0));
+    std::setlocale(LC_NUMERIC, "C");
+    auto msg = ( std::string("FreqLog,userspace,") + std::to_string(IRunner::run_id) + "," +std::to_string(DemoRunner::m_controller->GetCpuFreq(0)) + "," +  std::to_string(vals[2] / vals[0]));
+    LoggerFactory::GetLogger()->LogInfo(msg.c_str()); //printf("%ld\n\n",  BasicRunner::m_controller->GetCpuFreq(0));
     //printf("%lf,%ld\n", vals[2] / vals[0], freq);
 }
 static void dummy(int a) {UNUSED_VAR(a)}
@@ -52,10 +53,11 @@ stats_t DemoRunner::run(const std::string &path, governor_t governor) {
     wait(&status);
     signal(SIGALRM, dummy);
     m_collector->StopCollection();
-    stats_t stats = {time, energy, inst, cycles};
+    stats_t stats = {time, energy, inst, cycles, run_id};
     energy = 0;
     time = 0;
     inst = 0;
     cycles = 0;
+    run_id += 1;
     return stats;
 }

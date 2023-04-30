@@ -19,7 +19,7 @@ static void handler(int sn) {
     BasicRunner::cycles += vals[1];
 
     LoggerFactory::GetLogger()->LogInfo(
-            ( std::string("FreqLog,") + GovernerToString(BasicRunner::m_governor) + "," +std::to_string(BasicRunner::m_controller->GetCpuFreq(0)) ).c_str()); //printf("%ld\n\n",  BasicRunner::m_controller->GetCpuFreq(0));
+            ( std::string("FreqLog,") + GovernerToString(BasicRunner::m_governor) + "," + std::to_string(IRunner::run_id) + "," +std::to_string(BasicRunner::m_controller->GetCpuFreq(0)) ).c_str()); //printf("%ld\n\n",  BasicRunner::m_controller->GetCpuFreq(0));
 }
 static void dummy(int a) {UNUSED_VAR(a)}
 stats_t BasicRunner::run(const std::string &path, governor_t governor) {
@@ -51,10 +51,11 @@ stats_t BasicRunner::run(const std::string &path, governor_t governor) {
     wait(&status);
     signal(SIGALRM, dummy);
     m_collector->StopCollection();
-    stats_t stats = {time, energy, inst, cycles};
+    stats_t stats = {time, energy, inst, cycles, run_id};
     energy = 0;
     time = 0;
     inst = 0;
     cycles = 0;
+    run_id += 1;
     return stats;
 }

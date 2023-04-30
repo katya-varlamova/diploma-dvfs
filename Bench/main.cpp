@@ -4,7 +4,7 @@ int main()
 {
     const long bufSize = 1 * 1024 * 1024 * 1024;
     int cpuPortion = 5;
-    long cpuIters = 100000000 * std::pow(1.5, 0);
+    long cpuIters = 100000 * std::pow(1.5, 0);
     long memIters = 100000000; // 5000; 5000 * 20000
     int *arr = (int *) malloc(bufSize * sizeof(int));
     long* rands = (long *) malloc(memIters * sizeof (long));

@@ -56,4 +56,6 @@ private:
     std::map<governor_t, result_stats_t> m_stats;
     std::string m_graphDirectory;
     std::vector<std::shared_ptr<QImage>> m_graphImages;
+    std::shared_ptr<QImage> mrpiFreqGraph;
+    std::vector<int> runIDs;
 };

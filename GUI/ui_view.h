@@ -30,10 +30,12 @@ class Ui_View
 public:
     QWidget *centralwidget;
     QWidget *gridLayoutWidget;
+    QWidget *gridLayoutWidget_2;
     QGridLayout *gridLayout;
     QLabel *label_5;
     QLabel *label_4;
     QGridLayout *gridLayout_2;
+    QGridLayout *gridLayout_4;
     QLineEdit *attemptsText;
     QLineEdit *benchPathText;
     QLabel *label_2;
@@ -55,29 +57,41 @@ public:
     {
         if (View->objectName().isEmpty())
             View->setObjectName(QString::fromUtf8("View"));
-        View->resize(2282, 1299);
+        View->resize(2882, 1450);
         centralwidget = new QWidget(View);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+
         gridLayoutWidget = new QWidget(centralwidget);
         gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
-        gridLayoutWidget->setGeometry(QRect(10, 10, 2251, 1201));
+        gridLayoutWidget->setGeometry(QRect(10, 10, 1000, 701));
+
+        gridLayoutWidget_2 = new QWidget(centralwidget);
+        gridLayoutWidget_2->setObjectName(QString::fromUtf8("gridLayoutWidget_2"));
+        gridLayoutWidget_2->setGeometry(QRect(1050, 70, 1900, 1600));
+
         gridLayout = new QGridLayout(gridLayoutWidget);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
+
+        gridLayout_4 = new QGridLayout(gridLayoutWidget_2);
+        gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
+        gridLayout_4->setContentsMargins(0, 0, 0, 0);
+
         label_5 = new QLabel(gridLayoutWidget);
         label_5->setObjectName(QString::fromUtf8("label_5"));
         label_5->setStyleSheet(QString::fromUtf8("font: 18pt \"Ubuntu\";color:rgb(204, 0, 0);"));
 
         gridLayout->addWidget(label_5, 0, 0, 1, 1);
 
-        label_4 = new QLabel(gridLayoutWidget);
-        label_4->setObjectName(QString::fromUtf8("label_4"));
-        label_4->setStyleSheet(QString::fromUtf8("font: 18pt \"Ubuntu\";color:rgb(204, 0, 0);"));
-
-        gridLayout->addWidget(label_4, 0, 1, 1, 1);
 
         gridLayout_2 = new QGridLayout();
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+
+        label_4 = new QLabel(centralwidget);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+        label_4->setStyleSheet(QString::fromUtf8("font: 18pt \"Ubuntu\";color:rgb(204, 0, 0);"));
+        gridLayout_4->addWidget(label_4, 0, 0, 1, 1);
+
         attemptsText = new QLineEdit(gridLayoutWidget);
         attemptsText->setObjectName(QString::fromUtf8("attemptsText"));
 
@@ -146,10 +160,10 @@ public:
 
         gridLayout->addLayout(gridLayout_2, 1, 0, 1, 1);
 
-        tableWidget = new QTableWidget(gridLayoutWidget);
+        tableWidget = new QTableWidget(centralwidget);
         tableWidget->setObjectName(QString::fromUtf8("tableWidget"));
-
-        gridLayout->addWidget(tableWidget, 1, 1, 1, 1);
+        tableWidget->setGeometry(QRect(0, 0, 1900, 1600));
+        gridLayout_4->addWidget(tableWidget, 1, 0, 1, 1);
 
         View->setCentralWidget(centralwidget);
         menubar = new QMenuBar(View);
@@ -170,7 +184,7 @@ public:
         View->setWindowTitle(QApplication::translate("View", "View", nullptr));
         label_5->setText(QApplication::translate("View", "\320\230\321\201\321\205\320\276\320\264\320\275\321\213\320\265 \320\264\320\260\320\275\320\275\321\213\320\265", nullptr));
         label_4->setText(QApplication::translate("View", "\320\240\320\265\320\267\321\203\320\273\321\214\321\202\320\260\321\202", nullptr));
-        attemptsText->setText(QApplication::translate("View", "3", nullptr));
+        attemptsText->setText(QApplication::translate("View", "2", nullptr));
         attemptsText->setPlaceholderText(QString());
         label_2->setText(QApplication::translate("View", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \320\267\320\260\320\277\321\203\321\201\320\272\320\276\320\262 \320\277\321\200\320\276\321\206\320\265\321\201\321\201\320\260 \321\203\320\277\321\200\320\260\320\262\320\273\321\217\321\216\321\211\320\270\320\274 \321\207\320\260\321\201\321\202\320\276\321\202\320\260\320\274\320\270: ", nullptr));
         label->setText(QApplication::translate("View", "\320\237\321\203\321\202\321\214 \320\272 \320\270\321\201\320\277\320\276\320\273\320\275\321\217\320\265\320\274\320\276\320\274\321\203 \321\204\320\260\320\271\320\273\321\203 \320\277\321\200\320\276\321\206\320\265\321\201\321\201\320\260: ", nullptr));

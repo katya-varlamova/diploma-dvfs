@@ -1,2 +1,3 @@
 DB_NAME: "/home/kate/Desktop/diploma/repo/DBScripts/demoDB.db"
 LogFile: "/home/kate/Desktop/diploma/repo/logfile.log"
+GraphDirectory: "/home/kate/Desktop/diploma/repo/GraphDrawer/"

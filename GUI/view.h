@@ -45,6 +45,8 @@ private slots:
 
     void calculateStats();
 
+    void loadImages();
+
 private:
     Ui::View *ui;
     std::vector<governor_t> m_govs;
@@ -52,6 +54,6 @@ private:
     int m_attempts;
     std::shared_ptr<BaseConfig> m_config;
     std::map<governor_t, result_stats_t> m_stats;
-
-
+    std::string m_graphDirectory;
+    std::vector<std::shared_ptr<QImage>> m_graphImages;
 };

@@ -20,7 +20,7 @@ void
 SpdLogger::InitLogger( const std::shared_ptr<BaseConfig>& config )
 {
     std::string filePath = config->GetStringField( { LogFileSection } );
-
+    spdlog::flush_on(spdlog::level::info);
     if ( filePath != "stdout" ) {
         auto logger = spdlog::basic_logger_mt( "file_logger", filePath, true );
         spdlog::set_default_logger( logger );

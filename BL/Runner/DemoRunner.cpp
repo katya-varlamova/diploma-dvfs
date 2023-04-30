@@ -22,7 +22,7 @@ static void handler(int sn) {
     DemoRunner::inst += vals[0];
     DemoRunner::cycles += vals[1];
     LoggerFactory::GetLogger()->LogInfo(
-            ( std::string("FreqLog,demo,") +std::to_string(DemoRunner::m_controller->GetCpuFreq(0)) + "," +  std::to_string(vals[2] / vals[0])).c_str()); //printf("%ld\n\n",  BasicRunner::m_controller->GetCpuFreq(0));
+            ( std::string("FreqLog,userspace,") +std::to_string(DemoRunner::m_controller->GetCpuFreq(0)) + "," +  std::to_string(vals[2] / vals[0])).c_str()); //printf("%ld\n\n",  BasicRunner::m_controller->GetCpuFreq(0));
     //printf("%lf,%ld\n", vals[2] / vals[0], freq);
 }
 static void dummy(int a) {UNUSED_VAR(a)}

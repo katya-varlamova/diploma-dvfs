@@ -27,6 +27,6 @@ def drawHist(fn, bins, vals):
     plt.clf()
 data = readLog("/home/kate/Desktop/diploma/repo/logfile.log")
 for k in data:
-    drawHist("/home/kate/Desktop/diploma/repo/img/" + k + ".png", freqs, data[k])
+    drawHist("/home/kate/Desktop/diploma/repo/GraphDrawer/img/" + k + ".png", freqs, data[k])
  
                     

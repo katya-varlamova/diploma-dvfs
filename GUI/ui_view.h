@@ -176,7 +176,7 @@ public:
         mrpiLab->setObjectName(QString::fromUtf8("mrpiLab"));
         mrpiLab->setHidden(true);
         mrpiLab->setStyleSheet(QString::fromUtf8("font: 14pt \"Ubuntu\";color:rgb(204, 0, 0);"));
-        mrpiLab->setText("Изменение MRPI и частоты (нормированные)");
+        mrpiLab->setText("Изменение LLCMPI и частоты (нормированные)");
         gridLayout_5->addWidget(mrpiLab, 0, 0, 1, 1);
 
         mrpiImg = new QLabel(gridLayoutWidget_3);
@@ -215,7 +215,7 @@ public:
         conservativeButton->setText(QApplication::translate("View", "conservative", nullptr));
         schedutilButton->setText(QApplication::translate("View", "schedutil", nullptr));
         ondemandButton->setText(QApplication::translate("View", "ondemand", nullptr));
-        userspaceButton->setText(QApplication::translate("View", "mrpi-based (userspace)", nullptr));
+        userspaceButton->setText(QApplication::translate("View", "LLCMPI-based (userspace)", nullptr));
         label_3->setText(QApplication::translate("View", "\320\243\320\277\321\200\320\260\320\262\320\273\321\217\321\216\321\211\320\270\320\265 \321\207\320\260\321\201\321\202\320\276\321\202\320\260\320\274\320\270:", nullptr));
         compareButton->setText(QApplication::translate("View", "\320\277\321\200\320\276\320\262\320\265\321\201\321\202\320\270 \321\201\321\200\320\260\320\262\320\275\320\265\320\275\320\270\320\265", nullptr));
     } // retranslateUi

@@ -11,6 +11,6 @@ typedef struct {
 } stats_t;
 class IRunner {
 public:
-    virtual stats_t run(const std::string &path, governor_t governor) = 0;
+    virtual stats_t run(const std::string &path, std::vector<std::string> args, governor_t governor) = 0;
     static int run_id;
 };

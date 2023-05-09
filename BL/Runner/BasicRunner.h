@@ -8,7 +8,7 @@
 #include <sys/wait.h>
 class BasicRunner : public IRunner {
 public:
-    stats_t run(const std::string &path, governor_t governor) override;
+    stats_t run(const std::string &path, std::vector<std::string> args, governor_t governor) override;
 
     static std::shared_ptr<IPmuCollector> m_collector;
     static std::shared_ptr<ISystemController> m_controller;

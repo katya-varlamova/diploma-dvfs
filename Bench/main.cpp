@@ -12,7 +12,7 @@ int main()
         int r = rand();
         rands[i] = (i * 12 * 1024 * 1024 + (r % 12 * 1024 * 1024)) % bufSize;
     }
-    register long i asm ("rax") = 0;
+    register long i asm ("r12") = 0;
     // mem-bound part
     for (; i < memIters; i++) ++arr[rands[i]];
     // cpu-bound part

@@ -38,7 +38,7 @@ def drawMrpiFreqGraph(fn, mrpiFreqData):
     mrpi = [i / max_mrpi for i in mrpiFreqData[1]]
     plt.ylabel("нормализованное значение")
     plt.plot(t, fr, label = "частота")
-    plt.plot(t, mrpi, label = "mrpi")
+    plt.plot(t, mrpi, label = "LLCMPI")
     plt.legend()
     plt.savefig(fn)
     plt.clf()

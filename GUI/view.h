@@ -40,17 +40,15 @@ private slots:
     void on_userspaceButton_stateChanged(int arg1);
 
     void on_compareButton_clicked();
-
-    void drawTable();
-
-    void calculateStats();
-
-    void loadImages();
-
 private:
+    void drawTable();
+    void calculateStats();
+    void loadImages();
+    void parsePath();
     Ui::View *ui;
     std::vector<governor_t> m_govs;
     std::string m_benchPath;
+    std::vector<std::string> m_benchArgs;
     int m_attempts;
     std::shared_ptr<BaseConfig> m_config;
     std::map<governor_t, result_stats_t> m_stats;

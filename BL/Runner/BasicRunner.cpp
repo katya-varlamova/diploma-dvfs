@@ -22,7 +22,7 @@ static void handler(int sn) {
             ( std::string("FreqLog,") + GovernerToString(BasicRunner::m_governor) + "," + std::to_string(IRunner::run_id) + "," +std::to_string(BasicRunner::m_controller->GetCpuFreq(0)) ).c_str()); //printf("%ld\n\n",  BasicRunner::m_controller->GetCpuFreq(0));
 }
 static void dummy(int a) {UNUSED_VAR(a)}
-stats_t BasicRunner::run(const std::string &path, governor_t governor) {
+stats_t BasicRunner::run(const std::string &path, std::vector<std::string> args, governor_t governor) {
     m_governor = governor;
     for (int j = 0; j < 8; j++) {
         m_controller->SetCpuFreqGovernor(j, governor);
@@ -39,7 +39,14 @@ stats_t BasicRunner::run(const std::string &path, governor_t governor) {
     int pid = fork();
     if (pid == 0)
     {
-        execv(path.c_str(), NULL);
+        char **strs = (char **) malloc(args.size() * sizeof(char *));
+        int i;
+        for (i = 0; i < args.size(); i++) {
+            strs[i] = (char *) malloc(args[i].size() + 1);
+            strcpy(strs[i], args[i].c_str());
+        }
+        strs[i] = NULL;
+        execv(strs[0], strs);
         exit(0);
     }
     signal(SIGALRM, handler);

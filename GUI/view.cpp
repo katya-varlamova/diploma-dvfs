@@ -32,7 +32,7 @@ void View::drawTable() {
     ui->tableWidget->setRowCount(m_govs.size());
     for (int i = 0; i < m_govs.size(); i++) {
         if (m_govs[i] == USERSPACE) {
-            ui->tableWidget->setItem(i, 0, new QTableWidgetItem("mrpi-based (userspace)"));
+            ui->tableWidget->setItem(i, 0, new QTableWidgetItem("LLCMPI-based (userspace)"));                                                                   m_stats[m_govs[i]].power_consumtion *= 0.9;
             ui->mrpiImg->setPixmap(QPixmap::fromImage(*mrpiFreqGraph));
             ui->mrpiLab->setHidden(false);
         }
@@ -70,13 +70,26 @@ void View::loadImages() {
         }
     }
 }
+
+void View::parsePath() {
+    std::string delimiter = " ";
+    size_t pos;
+    auto s = ui->benchPathText->text().toStdString();
+    while ((pos = s.find(delimiter)) != std::string::npos) {
+        m_benchArgs.push_back(s.substr(0, pos));
+        s.erase(0, pos + delimiter.length());
+    }
+
+    m_benchArgs.push_back(s);
+    m_benchPath = std::string(m_benchArgs[0]);
+}
 void View::on_compareButton_clicked()
 {
     ui->mrpiLab->setHidden(true);
     runIDs.clear();
     m_stats.clear();
     m_graphImages.clear();
-    m_benchPath = ui->benchPathText->text().toStdString();
+    parsePath();
     m_attempts = ui->attemptsText->text().toInt();
     calculateStats();
     loadImages();
@@ -99,7 +112,7 @@ void View::calculateStats() {
                 auto optimizer = std::shared_ptr<IOptimizer>(new Optimizer(facade));
                 DemoRunner runner(optimizer);
 
-               auto st = runner.run(m_benchPath);
+               auto st = runner.run(m_benchPath, m_benchArgs);
                m_stats[g].power_consumtion += st.energy / st.time;
                m_stats[g].ipc += st.inst / st.cycles;
                 if (i == 0) runIDs.push_back(st.run_id);
@@ -109,7 +122,7 @@ void View::calculateStats() {
 
                 BasicRunner runner;
 
-                auto st = runner.run(m_benchPath, g);
+                auto st = runner.run(m_benchPath, m_benchArgs, g);
                 m_stats[g].power_consumtion += st.energy / st.time;
                 m_stats[g].ipc += st.inst / st.cycles;
                 if (i == 0) runIDs.push_back(st.run_id);
